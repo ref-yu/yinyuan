@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+// User 模型： 包含 id (socketId), nickname, mbti, interests (由于 SQLite 限制，存储为 JSON 字符串)
+model User {
+  id             String       @id // socketId
+  nickname       String?
+  mbti           String?
+  interests      String?      // 存储为序列化后的 JSON 字符串数组
+  status         String       @default("PENDING")
+  age            Int?
+  gender         String?
+  lookingFor     String?      // 期待寻找的对象类型
+  confidenceScore Float       @default(1.0) // 匹配置信度或活跃度得分
+  location       String?
+  lifeExperience String?      // 存储 AI 提炼的人生经历摘要
+  values         String?      // 存储价值观标签
+  matchedWithId  String?      // 记录匹配对象的 ID
+  memories       MemoryItem[]
+}
+
+// MemoryItem 模型： 存放 AI 提取的事实
+model MemoryItem {
+  id        Int      @id @default(autoincrement())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  category  String   // 兴趣/雷区/重要日程
+  content   String
+  createdAt DateTime @default(now())
+}
+
+// MatchRecord 模型： 记录匹配结果
+model MatchRecord {
+  id          String   @id @default(uuid())
+  userAId     String
+  userBId     String
+  matchReason String
+  createdAt   DateTime @default(now())
+}
+
+// ChatMessage 模型： 记录聊天消息
+model ChatMessage {
+  id        String   @id @default(cuid())
+  roomId    String
+  senderId  String
+  text      String
+  createdAt DateTime @default(now())
+}
