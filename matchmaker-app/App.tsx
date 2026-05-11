@@ -35,7 +35,7 @@ const CHINESE_COLORS = {
 export interface MatchmakerPersona {
   id: string;
   name: string;
-  avatar: string; // 用于聊天框或占位的头像
+  avatar: any; // 用于聊天框或占位的头像，支持 require 或 { uri: '...' }
   lottieSource: any; // 用于悬浮互动的 Lottie 模型
   desc: string;
   greeting: string;
@@ -45,7 +45,7 @@ export const MATCHMAKERS: MatchmakerPersona[] = [
   {
     id: 'm1',
     name: '灵儿',
-    avatar: 'https://api.dicebear.com/7.x/miniavs/png?seed=Linger&backgroundColor=fff59d',
+    avatar: require('./assets/ling-avatar.png'),
     lottieSource: require('./assets/ling-model.json'),
     desc: '极简治愈系小仙子',
     greeting: '主人，我是你的专属红娘 灵儿~\n你可以把我拖拽到任意位置哦！'
@@ -53,7 +53,7 @@ export const MATCHMAKERS: MatchmakerPersona[] = [
   {
     id: 'm2',
     name: '红袖',
-    avatar: 'https://api.dicebear.com/7.x/miniavs/png?seed=Hongxiu&backgroundColor=ffdfdf',
+    avatar: { uri: 'https://api.dicebear.com/7.x/miniavs/png?seed=Hongxiu&backgroundColor=ffdfdf' },
     lottieSource: require('./assets/ling-model.json'), // 暂且公用模型，你后续可替换
     desc: '温婉知心大姐姐',
     greeting: '你好，我是红袖。\n我会一直在这里陪伴你。'
@@ -61,7 +61,7 @@ export const MATCHMAKERS: MatchmakerPersona[] = [
   {
     id: 'm3',
     name: '飞燕',
-    avatar: 'https://api.dicebear.com/7.x/miniavs/png?seed=Feiyan&backgroundColor=e0f7fa',
+    avatar: { uri: 'https://api.dicebear.com/7.x/miniavs/png?seed=Feiyan&backgroundColor=e0f7fa' },
     lottieSource: require('./assets/ling-model.json'),
     desc: '又飒又俏国潮少女',
     greeting: '嗨！我是飞燕！\n有什么搞不定的场面就叫我！'
@@ -102,7 +102,7 @@ const WaitingScreen = ({ matchmaker }: { matchmaker: MatchmakerPersona }) => {
     <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: CHINESE_COLORS.paper }}>
       <Animated.View style={{ opacity: fadeAnim, transform: [{ translateY: fadeAnim.interpolate({ inputRange: [0.3, 1], outputRange: [10, -10] }) }] }}>
         <View style={{ width: 100, height: 100, borderRadius: 50, backgroundColor: '#FFF', justifyContent: 'center', alignItems: 'center', shadowColor: CHINESE_COLORS.rouge, shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 10, elevation: 5, borderWidth: 3, borderColor: CHINESE_COLORS.paleRouge }}>
-          <Image source={{ uri: matchmaker.avatar }} style={{ width: 90, height: 90, borderRadius: 45 }} />
+          <Image source={matchmaker.avatar} style={{ width: 90, height: 90, borderRadius: 45 }} />
         </View>
       </Animated.View>
       <Text style={{ fontSize: 18, fontWeight: '500', color: CHINESE_COLORS.ink, marginTop: 40, textAlign: 'center', paddingHorizontal: 30, lineHeight: 28 }}>
@@ -408,7 +408,7 @@ export default function App() {
     if (item.senderId === 'ai-system') {
       return (
         <View style={[styles.aiSystemMessageContainer, { alignSelf: 'flex-start', flexDirection: 'row', alignItems: 'flex-start' }]}>
-          <Image source={{ uri: selectedMatchmaker.avatar }} style={{ width: 40, height: 40, borderRadius: 20, marginRight: 10, borderWidth: 1, borderColor: CHINESE_COLORS.paleRouge, backgroundColor: '#fff' }} />
+          <Image source={selectedMatchmaker.avatar} style={{ width: 40, height: 40, borderRadius: 20, marginRight: 10, borderWidth: 1, borderColor: CHINESE_COLORS.paleRouge, backgroundColor: '#fff' }} />
           <View style={[styles.aiSystemMessageBubble, { borderTopLeftRadius: 4 }]}>
             <View style={{ flexShrink: 1 }}>
               <Text style={styles.aiSystemMessageName}>🏮 {selectedMatchmaker.name} (红娘)</Text>
@@ -458,8 +458,8 @@ export default function App() {
   };
 
   // 🌟 临时预览模式：用于在一个页面展示所有 UI 状态
-  const PREVIEW_MODE = true;
-  if (PREVIEW_MODE) {
+  const [isPreviewMode, setIsPreviewMode] = useState(true);
+  if (isPreviewMode) {
     return (
       <ScrollView style={{ flex: 1, backgroundColor: '#E0E0E0' }} contentContainerStyle={{ paddingBottom: 50 }}>
         <Text style={{ textAlign: 'center', paddingVertical: 15, fontSize: 16, color: '#333' }}>↓ 1. 寻缘阁 (登录) ↓</Text>
@@ -534,7 +534,7 @@ export default function App() {
               <View style={[styles.messageBubble, { alignSelf: 'flex-start', borderBottomLeftRadius: 4, backgroundColor: CHINESE_COLORS.rouge }]}><Text style={styles.messageText}>看你档案里写喜欢去海边</Text></View>
               
               <View style={[styles.aiSystemMessageContainer, { alignSelf: 'flex-start', flexDirection: 'row', alignItems: 'flex-start' }]}>
-                <Image source={{ uri: selectedMatchmaker.avatar }} style={{ width: 40, height: 40, borderRadius: 20, marginRight: 10, borderWidth: 1, borderColor: CHINESE_COLORS.paleRouge, backgroundColor: '#fff' }} />
+                <Image source={selectedMatchmaker.avatar} style={{ width: 40, height: 40, borderRadius: 20, marginRight: 10, borderWidth: 1, borderColor: CHINESE_COLORS.paleRouge, backgroundColor: '#fff' }} />
                 <View style={[styles.aiSystemMessageBubble, { borderTopLeftRadius: 4 }]}>
                   <View style={{ flexShrink: 1 }}>
                     <Text style={styles.aiSystemMessageName}>🏮 {selectedMatchmaker.name} (红娘)</Text>
@@ -546,7 +546,7 @@ export default function App() {
 
             <View style={[styles.suggestionCard, { display: 'flex' }]}>
               <View style={styles.suggestionAvatarContainer}>
-                <Image source={{ uri: selectedMatchmaker.avatar }} style={styles.suggestionAvatar} />
+                <Image source={selectedMatchmaker.avatar} style={styles.suggestionAvatar} />
               </View>
               <Text style={styles.suggestionLabel}>🏮 {selectedMatchmaker.name}的小锦囊 (点击采纳)</Text>
               <Text style={styles.suggestionText}>我上次去三亚潜水，感觉特别棒！你喜欢潜水吗？</Text>
@@ -558,6 +558,29 @@ export default function App() {
               <View style={styles.sendButton}><Ionicons name="paper-plane-outline" size={20} color="#FFF" /></View>
             </View>
           </SafeAreaView>
+        </View>
+
+        {/* 新增：进入正式页面的跳转按钮及提示 */}
+        <View style={{ padding: 30, alignItems: 'center', backgroundColor: '#E0E0E0' }}>
+          <Text style={{ color: '#666', marginBottom: 15, fontSize: 14 }}>以上为 UI 状态演示</Text>
+          <TouchableOpacity 
+            style={{ backgroundColor: CHINESE_COLORS.rouge, paddingVertical: 15, paddingHorizontal: 40, borderRadius: 25, shadowColor: CHINESE_COLORS.rouge, shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 5, elevation: 4 }}
+            onPress={() => {
+              if (Platform.OS === 'web') {
+                const result = window.confirm('即将进入正式匹配流程，你需要连接到服务器才能体验完整功能。');
+                if (result) {
+                  setIsPreviewMode(false);
+                }
+              } else {
+                Alert.alert('提示', '即将进入正式匹配流程，你需要连接到服务器才能体验完整功能。', [
+                  { text: '取消', style: 'cancel' },
+                  { text: '确定进入', onPress: () => setIsPreviewMode(false) }
+                ]);
+              }
+            }}
+          >
+            <Text style={{ color: '#fff', fontSize: 18, fontWeight: 'bold' }}>进入正式页面</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     );
@@ -675,7 +698,7 @@ export default function App() {
                       elevation: 2,
                     }}
                   >
-                    <Image source={{ uri: m.avatar }} style={{ width: 44, height: 44, borderRadius: 22, marginBottom: 8, borderWidth: 1, borderColor: '#EEE' }} />
+                    <Image source={m.avatar} style={{ width: 44, height: 44, borderRadius: 22, marginBottom: 8, borderWidth: 1, borderColor: '#EEE' }} />
                     <Text style={{ fontSize: 14, fontWeight: 'bold', color: CHINESE_COLORS.ink, marginBottom: 4 }}>{m.name}</Text>
                     <Text style={{ fontSize: 10, color: '#666', textAlign: 'center', lineHeight: 14 }}>{m.desc}</Text>
                   </TouchableOpacity>
@@ -813,7 +836,7 @@ export default function App() {
         >
           {/* 添加红娘头像：绝对定位，探出半个身子 */}
           <View style={styles.suggestionAvatarContainer}>
-             <Image source={{ uri: selectedMatchmaker.avatar }} style={styles.suggestionAvatar} />
+             <Image source={selectedMatchmaker.avatar} style={styles.suggestionAvatar} />
           </View>
 
           <Text style={styles.suggestionLabel}>
