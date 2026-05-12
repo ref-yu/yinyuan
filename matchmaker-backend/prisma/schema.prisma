@@ -3,9 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
-
 // User 模型： 包含 id (socketId), nickname, mbti, interests (由于 SQLite 限制，存储为 JSON 字符串)
 model User {
   id             String       @id // socketId

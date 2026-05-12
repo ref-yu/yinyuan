@@ -176,7 +176,7 @@ export default function App() {
     // 🌟 如果没登录，绝对不要连 Socket！
     if (!isLoggedIn) return;
     // 组件加载时连接到 Socket.IO 服务器 (保留原有 IP)
-    const newSocket = io('http://192.168.101.117:8080');
+    const newSocket = io('https://yinyuan.onrender.com/');
     setSocket(newSocket);
 
     // 监听连接成功事件
