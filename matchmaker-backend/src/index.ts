@@ -368,6 +368,7 @@ io.on('connection', (socket) => {
       socket.emit('room:history', state.chatHistory);
     }
 
+    console.log(`[新手村] 检查欢迎条件: roomId=${roomId}, historyLen=${state.chatHistory.length}, scheduled=${state.isGreetingScheduled}`);
     // 新手村欢迎问候
     if (roomId.startsWith('room_0_') && state.chatHistory.length === 0 && !state.isGreetingScheduled) {
       state.isGreetingScheduled = true; // 上锁防止并发重复打招呼
