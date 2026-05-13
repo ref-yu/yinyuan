@@ -187,7 +187,7 @@ export default function App() {
     });
 
     // 新增：监听后端返回的身份分流结果
-    newSocket.on('user:status', (data: { status: 'new' | 'existing', recommendRoom: string }) => {
+    newSocket.on('user:status', (data: { status: 'new' | 'existing' | 'ONBOARDING' | 'PENDING' | 'MATCHED', recommendRoom: string }) => {
       // 订阅专属通知频道，以便接收后台强拉匹配通知
       newSocket.emit('join:room', `user_${myUserId}`);
 
@@ -196,7 +196,8 @@ export default function App() {
         newSocket.emit('join:room', data.recommendRoom);
       }
 
-      if (data.status === 'new') {
+      
+      if (data.status === 'new' || data.status === 'ONBOARDING') {
         // 1. 新用户：进入新手村 onboarding 流程（此时可以和 AI 聊天构建画像）
         setAppState('onboarding');
       } else if (data.status === 'existing') {
