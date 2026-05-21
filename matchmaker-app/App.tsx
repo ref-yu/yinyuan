@@ -179,6 +179,7 @@ export default function App() {
     const newSocket = io('https://yinyuan.onrender.com/');
     setSocket(newSocket);
 
+    
     // 监听连接成功事件
     newSocket.on('connect', () => {
       console.log('已连接到服务器:', newSocket.id, '当前业务身份:', myUserId);
@@ -187,10 +188,11 @@ export default function App() {
     });
 
     // 新增：监听后端返回的身份分流结果
+    
     newSocket.on('user:status', (data: { status: 'new' | 'existing' | 'ONBOARDING' | 'PENDING' | 'MATCHED', recommendRoom: string }) => {
       // 订阅专属通知频道，以便接收后台强拉匹配通知
       newSocket.emit('join:room', `user_${myUserId}`);
-
+      console.log('[user:status] 收到:', JSON.stringify(data));
       if (data.recommendRoom) {
         setCurrentRoomId(data.recommendRoom);
         newSocket.emit('join:room', data.recommendRoom);
