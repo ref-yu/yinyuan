@@ -331,6 +331,7 @@ io.on('connection', (socket) => {
         socket.emit('user:status', { status: 'PENDING', recommendRoom: `match_hall_${data.userId}` });
         runGlobalMatchScan();
       } else {
+        console.log(`[新手村] 发送 ONBOARDING 状态给 ${data.userId}`);
         // 纯新兵或 ONBOARDING 状态，分配到自己的新手村房间
         socket.emit('user:status', { status: 'ONBOARDING', recommendRoom: `room_0_${data.userId}` });
       }
