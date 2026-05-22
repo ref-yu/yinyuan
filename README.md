@@ -1,6 +1,6 @@
 # 姻缘 (YinYuan) - AI 恋爱交友匹配与破冰平台
-后端示例：https://yinyuan.onrender.com
-前端示例：https://matchmaker-app-nu.vercel.app
+后端展示：https://yinyuan.onrender.com
+前端展示：https://matchmaker-app-nu.vercel.app
 
 本项目是一个基于 AI 驱动的 1v1 恋爱交友匹配平台。通过 AI 分析用户画像进行智能匹配，并在专属的 WebSockets 聊天室中，由 AI 僚机引导双方破冰、增进关系，提供全新的交友体验。
 
